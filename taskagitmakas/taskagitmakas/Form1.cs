@@ -91,11 +91,11 @@ namespace taskagitmakas
                 }
                 else if (secim == "Kağıt" && rasgeleSecim == "Makas")
                 {
-                    label3.Text = "Kaybettin!";
+                    label3.Text = "Bilgisayar Kazandı!";
                 }
                 else if (secim == "Kağıt" && rasgeleSecim == "Taş")
                 {
-                    label3.Text = "kazandin";
+                    label3.Text = "Kazandın!";
                 }
                 else if (secim == "Makas" && rasgeleSecim == "Makas")
                 {
@@ -103,11 +103,11 @@ namespace taskagitmakas
                 }
                 else if (secim == "Makas" && rasgeleSecim == "Kağıt")
                 {
-                    label3.Text = "kazandin";
+                    label3.Text = "Kazandın!";
                 }
                 else if (secim == "Makas" && rasgeleSecim == "Taş")
                 {
-                    label3.Text = "Kaybettin!";
+                    label3.Text = "Bilgisayar Kazandı!";
                 }
 
                 if (rasgeleSecim == "Taş")

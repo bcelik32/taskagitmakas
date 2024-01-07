@@ -118,7 +118,7 @@
             // 
             this.button7.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.button7.Image = ((System.Drawing.Image)(resources.GetObject("button7.Image")));
-            this.button7.Location = new System.Drawing.Point(183, 183);
+            this.button7.Location = new System.Drawing.Point(173, 202);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(70, 70);
             this.button7.TabIndex = 6;
@@ -129,7 +129,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft YaHei", 19.8F, System.Drawing.FontStyle.Bold);
-            this.label3.Location = new System.Drawing.Point(294, 210);
+            this.label3.Location = new System.Drawing.Point(253, 216);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(0, 45);
             this.label3.TabIndex = 9;

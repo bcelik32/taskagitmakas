@@ -40,7 +40,8 @@ namespace taskagitmakas
                 biraktif = "on",
                 hazir1db = currentData.hazir1db,
                 // Diğer alanları mevcut değerlerle aynı bırakmak için aşağıdaki satırları ekleyebilirsiniz
-                secim1db = currentData.secim1db
+                secim1db = currentData.secim1db,
+                chat1 = ""
                 
             };
 
@@ -67,6 +68,8 @@ namespace taskagitmakas
             public string hazir2db { get; set; }
             public string secim1db { get; set; }
             public string secim2db { get; set; }
+            public string chat1 { get; set; }
+            public string chat2 { get; set; }
             
 
         }
@@ -92,7 +95,9 @@ namespace taskagitmakas
                 ikiaktif = "on",
                 hazir2db = currentData.hazir2db,
                 // Diğer alanları mevcut değerlerle aynı bırakmak için aşağıdaki satırları ekleyebilirsiniz
-                secim2db = currentData.secim2db
+                secim2db = currentData.secim2db,
+                chat2 = ""
+
 
             };
 

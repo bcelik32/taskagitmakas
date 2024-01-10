@@ -47,25 +47,30 @@
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft YaHei", 19.8F, System.Drawing.FontStyle.Bold);
-            this.label6.Location = new System.Drawing.Point(428, 119);
+            this.label6.Location = new System.Drawing.Point(418, 119);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(0, 44);
+            this.label6.Size = new System.Drawing.Size(39, 44);
             this.label6.TabIndex = 47;
+            this.label6.Text = "0";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft YaHei", 19.8F, System.Drawing.FontStyle.Bold);
-            this.label4.Location = new System.Drawing.Point(350, 119);
+            this.label4.Location = new System.Drawing.Point(337, 119);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(0, 44);
+            this.label4.Size = new System.Drawing.Size(39, 44);
             this.label4.TabIndex = 45;
+            this.label4.Text = "0";
             // 
             // button10
             // 
@@ -81,7 +86,7 @@
             // button9
             // 
             this.button9.Font = new System.Drawing.Font("Microsoft YaHei", 19.8F, System.Drawing.FontStyle.Bold);
-            this.button9.Location = new System.Drawing.Point(306, 367);
+            this.button9.Location = new System.Drawing.Point(668, 443);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(182, 66);
             this.button9.TabIndex = 43;
@@ -227,12 +232,48 @@
             this.button1.TabIndex = 32;
             this.button1.UseVisualStyleBackColor = true;
             // 
+            // button7
+            // 
+            this.button7.Font = new System.Drawing.Font("Microsoft YaHei", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.button7.Location = new System.Drawing.Point(510, 412);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(106, 34);
+            this.button7.TabIndex = 51;
+            this.button7.Text = "Gönder";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click_1);
+            // 
+            // label8
+            // 
+            this.label8.Location = new System.Drawing.Point(292, 244);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(212, 165);
+            this.label8.TabIndex = 50;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox1.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox1.Font = new System.Drawing.Font("Microsoft YaHei", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.textBox1.Location = new System.Drawing.Point(292, 412);
+            this.textBox1.MaximumSize = new System.Drawing.Size(215, 38);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(213, 34);
+            this.textBox1.TabIndex = 49;
+            // 
             // player2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button7);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label4);
@@ -279,5 +320,8 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }

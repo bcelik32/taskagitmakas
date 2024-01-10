@@ -35,6 +35,8 @@ namespace taskagitmakas
             public string secim2db { get; set; }
             public string biraktif{ get; set; }
             public string ikiaktif{ get; set; }
+            public string chat1{ get; set; }
+            public string chat2{ get; set; }
 
 
         }
@@ -78,6 +80,7 @@ namespace taskagitmakas
             {
                 hazir2db = currentData.hazir2db,
                     ikiaktif = currentData.ikiaktif,
+                chat2 = currentData.chat2,
 
                 // Diğer alanları mevcut değerlerle aynı bırakmak için aşağıdaki satırları ekleyebilirsiniz
                 secim2db = secim2
@@ -117,6 +120,7 @@ namespace taskagitmakas
                 hazir2db = currentData.hazir2db,
                 // Diğer alanları mevcut değerlerle aynı bırakmak için aşağıdaki satırları ekleyebilirsiniz
                     ikiaktif = currentData.ikiaktif,
+                chat2 = currentData.chat2,
                 secim2db = secim2
 
             };
@@ -156,6 +160,7 @@ namespace taskagitmakas
             {
                 hazir2db = currentData.hazir2db,
                 ikiaktif = currentData.ikiaktif,
+                chat2 = currentData.chat2,
 
                 // Diğer alanları mevcut değerlerle aynı bırakmak için aşağıdaki satırları ekleyebilirsiniz
                 secim2db = secim2
@@ -202,7 +207,8 @@ namespace taskagitmakas
                     hazir2db = "true",
                     // Diğer alanları mevcut değerlerle aynı bırakmak için aşağıdaki satırları ekleyebilirsiniz
                     secim2db = currentData.secim2db,
-                    ikiaktif = currentData.ikiaktif
+                    ikiaktif = currentData.ikiaktif,
+                    chat2 = currentData.chat2
                 };
 
                 // Veriyi Firebase Realtime Database'de güncelle
@@ -215,7 +221,7 @@ namespace taskagitmakas
 
         string secimdb = "boş";
         string secim2db = "boş";
-
+        string karsidangelen = "";
         private async void timer1_Tick(object sender, EventArgs e)
         {
             // Butona basıldığında Firebase Client bağlantısı açılır
@@ -230,6 +236,11 @@ namespace taskagitmakas
             string pathToGetBirinciData = odalar.secilenoda + "/" + "birinci";
             FirebaseResponse birinciResponse = await client.GetAsync(pathToGetBirinciData);
             Data result = birinciResponse.ResultAs<Data>();
+            if (karsidangelen != result.chat1)
+            {
+                label8.Text = label8.Text + "\n" + result.chat1;
+                karsidangelen=result.chat1;
+            }
 
             string pathToGetIkinciData = odalar.secilenoda + "/" + "ikinci";
             FirebaseResponse ikinciResponse = await client.GetAsync(pathToGetIkinciData);
@@ -399,7 +410,8 @@ namespace taskagitmakas
                 hazir1db = "false",
                 secim1db = "yok",
                 biraktif="off",
-                
+                chat1 = ""
+
             };
             FirebaseResponse updateResponseBirinci = await client.UpdateAsync(odalar.secilenoda + "/" + "birinci", newDataBirinci);
 
@@ -408,7 +420,8 @@ namespace taskagitmakas
             {
                 hazir2db = "false",
                 secim2db = "yok",
-                ikiaktif = "off"
+                ikiaktif = "off",
+                chat2 = "",
             };
             FirebaseResponse updateResponseIkinci = await client.UpdateAsync(odalar.secilenoda + "/" + "ikinci", newDataIkinci);
             if (odalar.secilenoda != "Bekir ÇELİK - jr_cyberbot")
@@ -452,8 +465,40 @@ namespace taskagitmakas
           
         }
 
-        private void button7_Click(object sender, EventArgs e)
+        
+        string mesajgiden = "";
+        private async void button7_Click_1(object sender, EventArgs e)
         {
+            mesajgiden = "Sen:" + textBox1.Text;
+            client = new FireSharp.FirebaseClient(config);
+            button1.Enabled = false;
+            button2.Enabled = false;
+            button3.Enabled = false;
+            // Eğer hata var ise null döner
+            if (client == null)
+            {
+                MessageBox.Show("Bağlantı hatası.");
+                return;
+            }
+
+            // Belirtilen yoldaki mevcut veriyi çek
+            FirebaseResponse getResponse = await client.GetAsync(odalar.secilenoda + "/" + "ikinci");
+            Data currentData = getResponse.ResultAs<Data>();
+
+            // Güncellenecek veriyi hazırla ve sadece "hazir2db" alanını güncelle
+            var newData = new Data
+            {
+                hazir2db = currentData.hazir2db,
+                // Diğer alanları mevcut değerlerle aynı bırakmak için aşağıdaki satırları ekleyebilirsiniz
+                secim2db = currentData.secim2db,
+                ikiaktif = currentData.ikiaktif,
+                chat2 = "Rakip: " + textBox1.Text
+
+            };
+            label8.Text = label8.Text + "\n" + mesajgiden;
+            textBox1.Text = "";
+            // Veriyi Firebase Realtime Database'de güncelle
+            FirebaseResponse updateResponse = await client.UpdateAsync(odalar.secilenoda + "/" + "ikinci", newData);
         }
     }
 }

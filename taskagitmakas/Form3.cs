@@ -4,6 +4,7 @@ using FireSharp.Response;
 using System;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.Reflection.Emit;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -37,6 +38,8 @@ namespace taskagitmakas
             public string secim2db { get; set; }
             public string biraktif { get; set; }
             public string ikiaktif { get; set; }
+            public string chat1 { get; set; }
+            public string chat2 { get; set; }
 
         }
 
@@ -78,7 +81,8 @@ namespace taskagitmakas
                 hazir1db = currentData.hazir1db,
                 // Diğer alanları mevcut değerlerle aynı bırakmak için aşağıdaki satırları ekleyebilirsiniz
                 secim1db = secim,
-                biraktif = currentData.biraktif
+                biraktif = currentData.biraktif,
+                chat1 = currentData.chat1
 
             };
 
@@ -118,7 +122,8 @@ namespace taskagitmakas
                 hazir1db = currentData.hazir1db,
                 // Diğer alanları mevcut değerlerle aynı bırakmak için aşağıdaki satırları ekleyebilirsiniz
                 secim1db = secim,
-                biraktif = currentData.biraktif
+                biraktif = currentData.biraktif,
+                                chat1 = currentData.chat1
 
             };
 
@@ -156,7 +161,9 @@ namespace taskagitmakas
                 hazir1db = currentData.hazir1db,
                 // Diğer alanları mevcut değerlerle aynı bırakmak için aşağıdaki satırları ekleyebilirsiniz
                 secim1db = secim,
-                biraktif = currentData.biraktif
+                biraktif = currentData.biraktif,
+                chat1 = currentData.chat1
+
 
             };
 
@@ -195,7 +202,8 @@ namespace taskagitmakas
                     hazir1db = "true",
                     // Diğer alanları mevcut değerlerle aynı bırakmak için aşağıdaki satırları ekleyebilirsiniz
                     secim1db = currentData.secim1db,
-                    biraktif = currentData.biraktif
+                    biraktif = currentData.biraktif,
+                    chat1 = currentData.chat1
 
                 };
 
@@ -205,11 +213,11 @@ namespace taskagitmakas
             }
         }
 
-
+        string karsidangelen = "";
 
         private async void timer1_Tick(object sender, EventArgs e)
         {
-           // label3.Text = "timer çalışıyor";
+            // label3.Text = "timer çalışıyor";
             // Butona basıldığında Firebase Client bağlantısı açılır
             // Butona basıldığında Firebase Client bağlantısı açılır
             client = new FireSharp.FirebaseClient(config);
@@ -227,9 +235,13 @@ namespace taskagitmakas
             FirebaseResponse ikinciResponse = await client.GetAsync(pathToGetIkinciData);
             Data ikinciresult = ikinciResponse.ResultAs<Data>();
             // Sonuçları ekrandaki textBox'lara yazdırdık
-
+            if (karsidangelen != ikinciresult.chat2)
+            {
+                label7.Text = label7.Text + "\n" + ikinciresult.chat2;
+                karsidangelen = ikinciresult.chat2;
+            }
             //label3.Text = result.hazir2db;
-           // label7.Text = hazir;
+            // label7.Text = hazir;
 
 
 
@@ -366,8 +378,9 @@ namespace taskagitmakas
             {
                 hazir1db = "false",
                 secim1db = "yok",
-                biraktif = "off"
-                
+                biraktif = "off",
+                chat1 = ""
+
             };
             FirebaseResponse updateResponseBirinci = await client.UpdateAsync(odalar.secilenoda + "/" + "birinci", newDataBirinci);
 
@@ -376,7 +389,8 @@ namespace taskagitmakas
             {
                 hazir2db = "false",
                 secim2db = "yok",
-            ikiaktif = "off"
+                ikiaktif = "off",
+                chat2 = ""
             };
             FirebaseResponse updateResponseIkinci = await client.UpdateAsync(odalar.secilenoda + "/" + "ikinci", newDataIkinci);
             if (odalar.secilenoda != "Bekir ÇELİK - jr_cyberbot")
@@ -416,6 +430,72 @@ namespace taskagitmakas
                 Hide();
                 anamenu.Show();
             }
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toolStripContainer1_BottomToolStripPanel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        bool chatflag=false;
+        string mesajgiden = "";
+        private async void button8_Click(object sender, EventArgs e)
+        {
+            mesajgiden ="Sen:"+textBox1.Text;
+            client = new FireSharp.FirebaseClient(config);
+            button1.Enabled = false;
+            button2.Enabled = false;
+            button3.Enabled = false;
+            // Eğer hata var ise null döner
+            if (client == null)
+            {
+                MessageBox.Show("Bağlantı hatası.");
+                return;
+            }
+
+            // Belirtilen yoldaki mevcut veriyi çek
+            FirebaseResponse getResponse = await client.GetAsync(odalar.secilenoda + "/" + "birinci");
+            Data currentData = getResponse.ResultAs<Data>();
+
+            // Güncellenecek veriyi hazırla ve sadece "hazir2db" alanını güncelle
+            var newData = new Data
+            {
+                hazir1db = currentData.hazir1db,
+                // Diğer alanları mevcut değerlerle aynı bırakmak için aşağıdaki satırları ekleyebilirsiniz
+                secim1db = currentData.secim1db,
+                biraktif = currentData.biraktif,
+                chat1 = "Rakip: "+textBox1.Text
+
+            };
+            label7.Text = label7.Text+"\n"+mesajgiden;
+            textBox1.Text = "";
+            // Veriyi Firebase Realtime Database'de güncelle
+            FirebaseResponse updateResponse = await client.UpdateAsync(odalar.secilenoda + "/" + "birinci", newData);
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

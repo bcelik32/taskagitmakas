@@ -38,6 +38,36 @@ namespace taskagitmakas
             Application.Exit();
 
         }
+        private bool mouseDown;
+        private Point lastLocation;
+        private void player1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                mouseDown = true;
+                lastLocation = e.Location;
+            }
+        }
+
+        private void player1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (mouseDown)
+            {
+                Location = new Point(
+                    (Location.X - lastLocation.X) + e.X,
+                    (Location.Y - lastLocation.Y) + e.Y);
+
+                Update();
+            }
+        }
+
+        private void player1_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                mouseDown = false;
+            }
+        }
 
         private void label2_Click(object sender, EventArgs e)
         {
@@ -52,6 +82,11 @@ namespace taskagitmakas
         private void label2_MouseLeave(object sender, EventArgs e)
         {
             label2.ForeColor = Color.Black;
+
+        }
+
+        private void Form2_Load(object sender, EventArgs e)
+        {
 
         }
     }

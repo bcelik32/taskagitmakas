@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -39,6 +40,7 @@ namespace taskagitmakas
             public string odaid { get; set; }
             public string chat1 { get; set; }
             public string chat2 { get; set; }
+            public string odaparola { get; set; }
 
 
         }
@@ -59,70 +61,169 @@ namespace taskagitmakas
             }
         }
 
+
+        private void id_Enter(object sender, EventArgs e)
+        {
+            if (textBox3.Text == "Oda ID")
+            {
+                textBox3.Text = "";
+            }
+        }
+
+        private void id_Leave(object sender, EventArgs e)
+        {
+            if (textBox3.Text == "")
+            {
+                textBox3.Text = "Oda ID";
+            }
+        }
+
+        public static int ID = 0;
         private async void button1_Click(object sender, EventArgs e)
         {
-            if (textBox1.Text != "" || textBox1.Text=="Oda Adı")
+            if (checkBox1.Checked) 
             {
-                client = new FireSharp.FirebaseClient(config);
-                Random random = new Random();
-                int randomNumber = random.Next(0, 1000000);
-                // Eğer hata var ise null döner
-                if (client == null)
+                if (textBox1.Text != "" || textBox1.Text == "Oda Adı")
                 {
-                    MessageBox.Show("Bağlantı hatası.");
-                    return;
+                    if (textBox2.Text != "" || textBox2.Text == "Oda Parolası")
+                    {
+
+                        client = new FireSharp.FirebaseClient(config);
+                        Random random = new Random();
+                        ID = random.Next(0, 1000000);
+                        // Eğer hata var ise null döner
+                        if (client == null)
+                        {
+                            MessageBox.Show("Bağlantı hatası.");
+                            return;
+                        }
+
+                        // "birinci" kümesinden mevcut veriyi çek
+                        FirebaseResponse getResponseBirinci = await client.GetAsync(textBox1.Text + "/" + "birinci");
+                        Data currentDataBirinci = getResponseBirinci.ResultAs<Data>();
+
+
+                        // "ikinci" kümesinden mevcut veriyi çek
+                        FirebaseResponse getResponseIkinci = await client.GetAsync(textBox1.Text + "/" + "ikinci");
+                        Data currentDataIkinci = getResponseIkinci.ResultAs<Data>();
+
+                       
+
+                        FirebaseResponse getResponseidpas = await client.GetAsync(textBox1.Text);
+                        Data currentDataIid = getResponseidpas.ResultAs<Data>();
+
+                        // "birinci" kümesini güncelle ve sadece "hazir1db" ve "secim1db" alanlarını değiştir
+                        var newDataBirinci = new Data
+                        {
+                            hazir1db = "false",
+                            secim1db = "yok",
+                            biraktif = "off",
+                            chat1 = "",
+
+                        };
+                        FirebaseResponse updateResponseBirinci = await client.UpdateAsync(textBox1.Text + "/" + "birinci", newDataBirinci);
+
+                        // "ikinci" kümesini güncelle ve sadece "hazir2db" ve "secim2db" alanlarını değiştir
+                        var newDataIkinci = new Data
+                        {
+                            hazir2db = "false",
+                            secim2db = "yok",
+                            ikiaktif = "off",
+                            chat2 = ""
+
+                        };
+                        FirebaseResponse updateResponseIkinci = await client.UpdateAsync(textBox1.Text + "/" + "ikinci", newDataIkinci);
+
+
+                        var idyukle = new Data
+                        {
+
+                            odaid = ID.ToString(),
+                            odaparola = textBox2.Text
+
+                        };
+                        FirebaseResponse updateResponseid = await client.UpdateAsync(textBox1.Text, idyukle);
+                        parolagir.odaparolasi = textBox2.Text;
+                        secilenoda = textBox1.Text;
+                        player osece = new player();
+                        Hide();
+                        osece.Show();
+                    }
+                    else
+                    {
+                        textBox2.Text = "Lütfen Bir Parola Adı Giriniz";
+                    }
                 }
-
-                // "birinci" kümesinden mevcut veriyi çek
-                FirebaseResponse getResponseBirinci = await client.GetAsync(textBox1.Text + "/" + "birinci");
-                Data currentDataBirinci = getResponseBirinci.ResultAs<Data>();
-
-                // "ikinci" kümesinden mevcut veriyi çek
-                FirebaseResponse getResponseIkinci = await client.GetAsync(textBox1.Text + "/" + "ikinci");
-                Data currentDataIkinci = getResponseIkinci.ResultAs<Data>();
-
-                FirebaseResponse getResponseid = await client.GetAsync(textBox1.Text);
-                Data currentDataIid = getResponseIkinci.ResultAs<Data>();
-
-                // "birinci" kümesini güncelle ve sadece "hazir1db" ve "secim1db" alanlarını değiştir
-                var newDataBirinci = new Data
+                else
                 {
-                    hazir1db = "false",
-                    secim1db = "yok",
-                    biraktif = "off",
-                    chat1 = "",
-
-                };
-                FirebaseResponse updateResponseBirinci = await client.UpdateAsync(textBox1.Text + "/" + "birinci", newDataBirinci);
-
-                // "ikinci" kümesini güncelle ve sadece "hazir2db" ve "secim2db" alanlarını değiştir
-                var newDataIkinci = new Data
-                {
-                    hazir2db = "false",
-                    secim2db = "yok",
-                    ikiaktif = "off",
-                    chat2 = ""
-
-                };
-                FirebaseResponse updateResponseIkinci = await client.UpdateAsync(textBox1.Text + "/" + "ikinci", newDataIkinci);
-
-
-                var idyukle = new Data
-                {
-
-                    odaid = randomNumber.ToString()
-
-                };
-                FirebaseResponse updateResponseid = await client.UpdateAsync(textBox1.Text, idyukle);
-                yenile();
-                secilenoda = textBox1.Text;
-                player osece = new player();
-                Hide();
-                osece.Show();
+                    textBox1.Text = "Lütfen Bir Oda Adı Giriniz";
+                }
             }
             else
             {
-                textBox1.Text = "Lütfen Bir Oda Adı Giriniz";
+                if (textBox1.Text != "" || textBox1.Text == "Oda Adı")
+                {
+                    client = new FireSharp.FirebaseClient(config);
+                    Random random = new Random();
+                    ID = random.Next(0, 1000000);
+                    // Eğer hata var ise null döner
+                    if (client == null)
+                    {
+                        MessageBox.Show("Bağlantı hatası.");
+                        return;
+                    }
+
+                    // "birinci" kümesinden mevcut veriyi çek
+                    FirebaseResponse getResponseBirinci = await client.GetAsync(textBox1.Text + "/" + "birinci");
+                    Data currentDataBirinci = getResponseBirinci.ResultAs<Data>();
+
+                    // "ikinci" kümesinden mevcut veriyi çek
+                    FirebaseResponse getResponseIkinci = await client.GetAsync(textBox1.Text + "/" + "ikinci");
+                    Data currentDataIkinci = getResponseIkinci.ResultAs<Data>();
+
+                    FirebaseResponse getResponseid = await client.GetAsync(textBox1.Text);
+                    Data currentDataIid = getResponseIkinci.ResultAs<Data>();
+
+                    // "birinci" kümesini güncelle ve sadece "hazir1db" ve "secim1db" alanlarını değiştir
+                    var newDataBirinci = new Data
+                    {
+                        hazir1db = "false",
+                        secim1db = "yok",
+                        biraktif = "off",
+                        chat1 = "",
+
+                    };
+                    FirebaseResponse updateResponseBirinci = await client.UpdateAsync(textBox1.Text + "/" + "birinci", newDataBirinci);
+
+                    // "ikinci" kümesini güncelle ve sadece "hazir2db" ve "secim2db" alanlarını değiştir
+                    var newDataIkinci = new Data
+                    {
+                        hazir2db = "false",
+                        secim2db = "yok",
+                        ikiaktif = "off",
+                        chat2 = ""
+
+                    };
+                    FirebaseResponse updateResponseIkinci = await client.UpdateAsync(textBox1.Text + "/" + "ikinci", newDataIkinci);
+
+
+                    var idyukle = new Data
+                    {
+
+                        odaid = ID.ToString()
+
+                    };
+                    FirebaseResponse updateResponseid = await client.UpdateAsync(textBox1.Text, idyukle);
+                    yenile();
+                    secilenoda = textBox1.Text;
+                    player osece = new player();
+                    Hide();
+                    osece.Show();
+                }
+                else
+                {
+                    textBox1.Text = "Lütfen Bir Oda Adı Giriniz";
+                }
             }
         }
 
@@ -135,13 +236,39 @@ namespace taskagitmakas
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (textBox1.Text == "" || textBox1.Text=="Oda Adı")
+           
+            if (checkBox1.Checked == true)
             {
-                button1.Enabled = false;
+                textBox2.Enabled = true;
+
+                if (textBox1.Text == "" || textBox1.Text == "Oda Adı" || textBox2.Text == "" || textBox2.Text == "Oda Parolası")
+                {
+                    button1.Enabled = false;
+                }
+                else
+                {
+                    button1.Enabled = true;
+                }
             }
             else
             {
-                button1.Enabled = true;
+                //textBox2.Enabled = false;
+                if (textBox1.Text == "" || textBox1.Text == "Oda Adı")
+                {
+                    button1.Enabled = false;
+                }
+                else
+                {
+                    button1.Enabled = true;
+                }
+            }
+            if (textBox3.Text == "" || textBox3.Text == "Oda Adı")
+            {
+                button5.Enabled = false;
+            }
+            else
+            {
+                button5.Enabled = true;
             }
         }
      
@@ -190,6 +317,7 @@ namespace taskagitmakas
             }
         }
         string aktifk = "";
+        public static string idstr="";
         private async void yenile()
         {/*
             listBox1.Items.Clear();
@@ -239,7 +367,7 @@ namespace taskagitmakas
                         {
                             string birinciBiraktifValue = birinciData.biraktif;
                             string ikinciIkiaktifValue = ikinciData.ikiaktif;
-                            string idstr = fiddata.odaid;
+                            idstr = fiddata.odaid;
                             if (birinciBiraktifValue == "on" && ikinciIkiaktifValue == "on")
                             {
                                 // listBox3.Items.Add($"2/2");
@@ -287,6 +415,37 @@ namespace taskagitmakas
 
         }
 
+        private bool mouseDown;
+        private Point lastLocation;
+        private void player1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                mouseDown = true;
+                lastLocation = e.Location;
+            }
+        }
+
+        private void player1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (mouseDown)
+            {
+                Location = new Point(
+                    (Location.X - lastLocation.X) + e.X,
+                    (Location.Y - lastLocation.Y) + e.Y);
+
+                Update();
+            }
+        }
+
+        private void player1_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                mouseDown = false;
+            }
+        }
+
         private void button4_Click(object sender, EventArgs e)
         {
             timer2.Stop();
@@ -305,17 +464,46 @@ namespace taskagitmakas
             MessageBox.Show("Tıklanan ID: " + itemId, "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void listView1_DoubleClick(object sender, EventArgs e)
+        private async void listView1_DoubleClick(object sender, EventArgs e)
         {
-            string itemId = listView1.SelectedItems[0].SubItems[0].Text;
+            client = new FireSharp.FirebaseClient(config);
 
-            if (itemId != "")
+            string itemId = listView1.SelectedItems[0].SubItems[0].Text;
+            // Eğer hata var ise null döner
+            if (client == null)
+                MessageBox.Show("Bağlantı hatası.");
+
+            // Firebase database'i oluştururken directory oluşturmadığımız için GetAsync içerisini boş bıraktık
+            FirebaseResponse response = await client.GetAsync($"{itemId}");
+
+            // Response ile dönen sonuçları Data sınıfına aktardık
+            Data result = response.ResultAs<Data>();
+
+            if (result.odaparola !="") 
             {
-                secilenoda = itemId;
-                player osece = new player();
-                Hide();
-                osece.Show();
+                if (itemId != "")
+                {
+                    secilenoda = itemId;
+                    parolagir parolatextbox = new parolagir();
+                    Hide();
+                    parolatextbox.Show();
+                }
             }
+            else
+            {
+                textBox1.Text = itemId+result.odaparola.ToString();
+                
+                if (itemId != "")
+                {
+                    secilenoda = itemId;
+                    player osece = new player();
+                    Hide();
+                    osece.Show();
+                }
+                
+                
+            }
+            
         }
 
         private void listView1_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
@@ -331,6 +519,107 @@ namespace taskagitmakas
             else if (e.ColumnIndex == 2 && listView1.Columns[2].Width != 60)
             {
                 listView1.Columns[2].Width = 60;
+            }
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_Enter(object sender, EventArgs e)
+        {
+            if (textBox2.Text == "Oda Parolası")
+            {
+                textBox2.Text = "";
+            }
+        }
+
+        private void textBox2_Leave(object sender, EventArgs e)
+        {
+            if (textBox2.Text == "")
+            {
+                textBox2.Text = "Oda Parolası";
+            }
+        }
+        public static string idsecilenoda = ""; 
+        private async void button5_Click(object sender, EventArgs e)
+        {
+
+            string searchId = textBox3.Text; // TextBox'tan alınan ID değeri
+            bool found = false;
+
+            // Firebase Realtime Database'den tüm çocuk düğümleri al
+            FirebaseResponse getResponse = await client.GetAsync("/");
+
+            if (getResponse.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                Dictionary<string, object> data = getResponse.ResultAs<Dictionary<string, object>>();
+
+                // En üst düzey koleksiyonların isimlerini al
+                List<string> topLevelCollectionNames = new List<string>(data.Keys);
+
+                // Bu isimleri tek tek kontrol et
+                foreach (var collectionName in topLevelCollectionNames)
+                {
+                    // Her koleksiyondan "odaid" değerini al
+                    FirebaseResponse childResponse = await client.GetAsync($"/{collectionName}/odaid");
+                    string odaIdValue = childResponse.ResultAs<string>();
+
+                    // Eğer aranan ID değeri bulunduysa
+                    if (odaIdValue == searchId)
+                    {
+                        //MessageBox.Show($"{collectionName}");
+                        found = true;
+                       
+                        client = new FireSharp.FirebaseClient(config);
+
+                       //string itemId = listView1.SelectedItems[0].SubItems[0].Text;
+                        // Eğer hata var ise null döner
+                        if (client == null)
+                            MessageBox.Show("Bağlantı hatası.");
+
+                        // Firebase database'i oluştururken directory oluşturmadığımız için GetAsync içerisini boş bıraktık
+                        FirebaseResponse response = await client.GetAsync($"{collectionName}");
+
+                        // Response ile dönen sonuçları Data sınıfına aktardık
+                        Data result = response.ResultAs<Data>();
+
+                        if (result.odaparola != "")
+                        {
+                            //idsecilenoda = collectionName;
+                                secilenoda = collectionName;
+                            
+                                parolagir parolatextbox = new parolagir();
+                                Hide();
+                                parolatextbox.Show();
+                            
+                            //button5.Text= result.odaparola;
+                        }
+                        else
+                        {
+                            
+                                secilenoda = collectionName;
+                                player osece = new player();
+                                Hide();
+                                osece.Show();
+                            
+
+
+                        }
+                        break;
+                    }
+                }
+
+                // Eğer aranan ID değeri bulunamadıysa
+                if (!found)
+                {
+                    MessageBox.Show($"{searchId} ID' ye Sahip Oda Bulunamadı.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Firebase'den veri alınamadı. Hata kodu: " + getResponse.StatusCode);
             }
         }
     }

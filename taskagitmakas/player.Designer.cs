@@ -77,7 +77,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "player";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "player";
+            this.Text = "Oyuncu Seç";
             this.Load += new System.EventHandler(this.player_Load);
             this.ResumeLayout(false);
 

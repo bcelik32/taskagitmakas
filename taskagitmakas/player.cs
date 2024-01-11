@@ -41,7 +41,7 @@ namespace taskagitmakas
                 hazir1db = currentData.hazir1db,
                 // Diğer alanları mevcut değerlerle aynı bırakmak için aşağıdaki satırları ekleyebilirsiniz
                 secim1db = currentData.secim1db,
-                chat1 = ""
+                chat1 = currentData.chat1
                 
             };
 
@@ -96,7 +96,7 @@ namespace taskagitmakas
                 hazir2db = currentData.hazir2db,
                 // Diğer alanları mevcut değerlerle aynı bırakmak için aşağıdaki satırları ekleyebilirsiniz
                 secim2db = currentData.secim2db,
-                chat2 = ""
+                chat2 = currentData.chat2
 
 
             };

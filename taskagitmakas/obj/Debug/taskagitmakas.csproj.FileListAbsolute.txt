@@ -88,3 +88,5 @@ C:\Users\musta\OneDrive\Desktop\taskagitmakas\taskagitmakas\obj\Debug\taskagitma
 C:\Users\musta\OneDrive\Desktop\taskagitmakas\taskagitmakas\obj\Debug\taskagitmakas.csproj.CopyComplete
 C:\Users\musta\OneDrive\Desktop\taskagitmakas\taskagitmakas\obj\Debug\taskagitmakas.exe
 C:\Users\musta\OneDrive\Desktop\taskagitmakas\taskagitmakas\obj\Debug\taskagitmakas.pdb
+C:\Users\musta\OneDrive\Desktop\taskagitmakas\taskagitmakas\obj\Debug\taskagitmakas.odabilgisi.resources
+C:\Users\musta\OneDrive\Desktop\taskagitmakas\taskagitmakas\obj\Debug\taskagitmakas.parolagir.resources
